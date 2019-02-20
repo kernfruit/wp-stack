@@ -17,7 +17,6 @@ Versions should match your development container (See `.lando.yml`)!
 * MySQL 5.7
 * SSH access
 * git
-* Composer - [Install](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
 
 ## Installation
 
