@@ -17,7 +17,6 @@ set('shared_dirs', ['web/app/uploads']);
 set('writable_dirs', ['web/app/uploads']);
 
 task('deploy', [
-    'deploy:info',
     'deploy:prepare',
     'deploy:lock',
     'deploy:release',
