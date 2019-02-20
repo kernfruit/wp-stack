@@ -16,6 +16,8 @@ inventory('hosts.yml');
 set('shared_dirs', ['web/app/uploads']);
 set('writable_dirs', ['web/app/uploads']);
 
+task('deploy:environment', 'cp .env.production .env');
+
 task('deploy', [
     'deploy:prepare',
     'deploy:lock',
@@ -23,6 +25,7 @@ task('deploy', [
     'deploy:update_code',
     'deploy:shared',
     'deploy:vendors',
+    'deploy:environment',
     'deploy:writable',
     'deploy:symlink',
     'deploy:unlock',

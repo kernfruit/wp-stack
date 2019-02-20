@@ -54,20 +54,10 @@ Versions should match your development container (See `.lando.yml`)!
 
 Deployment is done via [Deployer](https://deployer.org/). You need SSH access to your server.
 
-1. Make shure that your server has the required environment variables defined. If you are using Apache you can do this with the [SetEnv directive](https://docstore.mik.ua/orelly/linux/apache/ch04_06.htm) in your `.htaccess` file or your vhosts configuration file:
-  ```
-  SetEnv WP_ENV production
-  SetEnv WP_HOME http://example.com
-  ```
-  For all options see `.env.example` file.
-
-- Create remote repository (e.g. on GitHub or BitBucket).
+1. Update your production settings in the `.env.production` file. For more options see `.env.example`.
+- Create remote repository (e.g. on GitHub or BitBucket). If your repositiory is private, you might have to manage [deploy keys](https://deployer.org/docs/advanced/deploy-and-git.html#deploy-keys).
 - Update `hosts.yml` file with your server information. See [Deployer docs](https://deployer.org/docs/hosts.html) for more info.
 - Add the URL of your remote repository to `deploy.php` file.
-- *Optional*: If you have composer not installed on your server yet, you can use the following task:
-```sh
-$ dep install-composer production
-```
 
 ### Deploy code
 

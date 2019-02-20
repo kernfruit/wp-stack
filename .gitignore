@@ -14,6 +14,7 @@ web/wp
 .env.*
 !.env.example
 !.env.lando
+!.env.production
 
 # Composer
 /vendor
