@@ -8,12 +8,12 @@ web/app/uploads/*
 
 # WordPress
 web/wp
-web/.htaccess
 
 # Dotenv
 .env
 .env.*
 !.env.example
+!.env.lando
 
 # Composer
 /vendor

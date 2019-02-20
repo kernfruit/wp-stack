@@ -1,0 +1,22 @@
+name: wp-stack
+recipe: wordpress
+proxy:
+  appserver:
+    - wp-stack.test
+config:
+  php: '7.2'
+  via: apache:2.4
+  webroot: web
+  database: mysql:5.7
+  xdebug: true
+services:
+  composer:
+    type: php:7.2
+    run:
+      - composer update
+      - composer install
+events:
+  pre-start:
+    - cp .env.lando .env
+  post-start:
+    - sh scripts/setup.sh

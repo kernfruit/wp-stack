@@ -1,68 +1,97 @@
-# [Bedrock](https://roots.io/bedrock/)
-[![Packagist](https://img.shields.io/packagist/v/roots/bedrock.svg?style=flat-square)](https://packagist.org/packages/roots/bedrock)
-[![Build Status](https://img.shields.io/travis/roots/bedrock.svg?style=flat-square)](https://travis-ci.org/roots/bedrock)
+# WP-Stack
 
-Bedrock is a modern WordPress stack that helps you get started with the best development tools and project structure.
-
-Much of the philosophy behind Bedrock is inspired by the [Twelve-Factor App](http://12factor.net/) methodology including the [WordPress specific version](https://roots.io/twelve-factor-wordpress/).
-
-## Features
-
-* Better folder structure
-* Dependency management with [Composer](https://getcomposer.org)
-* Easy WordPress configuration with environment specific files
-* Environment variables with [Dotenv](https://github.com/vlucas/phpdotenv)
-* Autoloader for mu-plugins (use regular plugins as mu-plugins)
-* Enhanced security (separated web root and secure passwords with [wp-password-bcrypt](https://github.com/roots/wp-password-bcrypt))
+Opinionated starting point for WordPress projects based on [Bedrock](https://roots.io/bedrock/) by Roots. It adds [Lando](https://docs.devwithlando.io/) for spinning up a development environment on Docker and [Deployer](https://deployer.org/) for deploying to a production server.
 
 ## Requirements
 
-* PHP >= 7.1
+### On you computer for development
+* Lando - [Install](https://docs.devwithlando.io/installation/system-requirements.html)
+* Deployer - [Install](https://deployer.org/docs/getting-started.html)
+
+### On server
+
+Versions should match your development container (See `.lando.yml`)!
+
+* Apache 2.4
+* PHP 7.2
+* MySQL 5.7
+* SSH access
+* git
 * Composer - [Install](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
 
 ## Installation
 
 1. Create a new project:
     ```sh
-    $ composer create-project roots/bedrock
+    $ git clone https://github.com/kernfruit/wp-stack
+    $ git init
     ```
-2. Update environment variables in the `.env` file:
-  * Database variables
-    * `DB_NAME` - Database name
-    * `DB_USER` - Database user
-    * `DB_PASSWORD` - Database password
-    * `DB_HOST` - Database host
-    * Optionally, you can define `DATABASE_URL` for using a DSN instead of using the variables above (e.g. `mysql://user:password@127.0.0.1:3306/db_name`)
-  * `WP_ENV` - Set to environment (`development`, `staging`, `production`)
-  * `WP_HOME` - Full URL to WordPress home (https://example.com)
-  * `WP_SITEURL` - Full URL to WordPress including subdirectory (https://example.com/wp)
-  * `AUTH_KEY`, `SECURE_AUTH_KEY`, `LOGGED_IN_KEY`, `NONCE_KEY`, `AUTH_SALT`, `SECURE_AUTH_SALT`, `LOGGED_IN_SALT`, `NONCE_SALT`
-    * Generate with [wp-cli-dotenv-command](https://github.com/aaemnnosttv/wp-cli-dotenv-command)
-    * Generate with [our WordPress salts generator](https://roots.io/salts.html)
-3. Add theme(s) in `web/app/themes/` as you would for a normal WordPress site
-4. Set the document root on your webserver to Bedrock's `web` folder: `/path/to/site/web/`
-5. Access WordPress admin at `https://example.com/wp/wp-admin/`
+- *Optional*: Change package name and URLs to your project name in following files:
+    ```
+    composer.json
+    .lando.yml
+    .env.lando
+    ```
+- Start Lando and follow instructions to create WordPress site:
+    ```sh
+    $ lando start
+    ```
+- *Optional*: Require additional dependencies and install them:
+    ```sh
+    $ lando composer require <package>
+    $ lando composer install
+    ```
+- Add the following line to your `/etc/hosts` file:
+  ```
+  127.0.0.1 wp-stack.test
+  ```
+  <small>If you changed the `WP_URL` in your .env file you have to use it here as well!</small>
+
+- Access WordPress admin at https://wp-stack.test/wp-admin
+
+## Deployment
+
+### Prerequisites
+
+Deployment is done via [Deployer](https://deployer.org/). You need SSH access to your server.
+
+1. Make shure that your server has the required environment variables defined. If you are using Apache you can do this with the [SetEnv directive](https://docstore.mik.ua/orelly/linux/apache/ch04_06.htm) in your `.htaccess` file or your vhosts configuration file:
+  ```
+  SetEnv WP_ENV production
+  SetEnv WP_HOME http://example.com
+  ```
+  For all options see `.env.example` file.
+
+- Create remote repository (e.g. on GitHub or BitBucket).
+- Update `hosts.yml` file with your server information. See [Deployer docs](https://deployer.org/docs/hosts.html) for more info.
+- Add the URL of your remote repository to `deploy.php` file.
+- *Optional*: If you have composer not installed on your server yet, you can use the following task:
+```sh
+$ dep install-composer production
+```
+
+### Deploy code
+
+To install a fresh instance from your remote repository, run:
+
+```sh
+$ dep deploy production
+```
+
+## Migrate data
+
+### Import/export database
+
+```sh
+$ lando db-export
+$ lando db-import dump.sql
+```
+
+See Lando docs for more information and options on [exporting](https://docs.devwithlando.io/guides/db-export.html)/[importing](https://docs.devwithlando.io/guides/db-import.html) databases.
+
 
 ## Documentation
 
-Bedrock documentation is available at [https://roots.io/bedrock/docs/](https://roots.io/bedrock/docs/).
-
-## Contributing
-
-Contributions are welcome from everyone. We have [contributing guidelines](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md) to help you get started.
-
-## Bedrock sponsors
-
-Help support our open-source development efforts by [becoming a patron](https://www.patreon.com/rootsdev).
-
-<a href="https://kinsta.com/?kaid=OFDHAJIXUDIV"><img src="https://cdn.roots.io/app/uploads/kinsta.svg" alt="Kinsta" width="200" height="150"></a> <a href="https://k-m.com/"><img src="https://cdn.roots.io/app/uploads/km-digital.svg" alt="KM Digital" width="200" height="150"></a> <a href="https://www.itineris.co.uk/"><img src="https://cdn.roots.io/app/uploads/itineris.svg" alt="itineris" width="200" height="150"></a>
-
-## Community
-
-Keep track of development and community news.
-
-* Participate on the [Roots Discourse](https://discourse.roots.io/)
-* Follow [@rootswp on Twitter](https://twitter.com/rootswp)
-* Read and subscribe to the [Roots Blog](https://roots.io/blog/)
-* Subscribe to the [Roots Newsletter](https://roots.io/subscribe/)
-* Listen to the [Roots Radio podcast](https://roots.io/podcast/)
+- Bedrock: [https://roots.io/bedrock/docs/](https://roots.io/bedrock/docs/)
+- Lando: [https://docs.devwithlando.io/](https://docs.devwithlando.io/)
+- Deployer: [https://deployer.org/docs/getting-started.html](https://deployer.org/docs/getting-started.html)
