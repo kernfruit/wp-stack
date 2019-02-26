@@ -56,7 +56,7 @@ Deployment is done via [Deployer](https://deployer.org/). You need SSH access to
 
 1. Update your production settings in the `.env.production` file. For more options see `.env.example`.
 - Create remote repository (e.g. on GitHub or BitBucket). If your repositiory is private, you might have to manage [deploy keys](https://deployer.org/docs/advanced/deploy-and-git.html#deploy-keys).
-- Update `hosts.yml` file with your server information. See [Deployer docs](https://deployer.org/docs/hosts.html) for more info.
+- Update `hosts.yml` file with your server information (do not use `~` for `deploy_path`!). See [Deployer docs](https://deployer.org/docs/hosts.html) for more info.
 - Add the URL of your remote repository to `deploy.php` file.
 
 ### Deploy code
@@ -78,6 +78,32 @@ $ lando db-import dump.sql
 
 See Lando docs for more information and options on [exporting](https://docs.devwithlando.io/guides/db-export.html)/[importing](https://docs.devwithlando.io/guides/db-import.html) databases.
 
+### Exchange content with remote server
+
+To exchange data with server you have to install WP-CLI on your server first:
+
+```sh
+$ dep wp-cli:install production
+```
+
+Then you can *pull* or *push* database and uploads from/to remote server:
+
+```sh
+$ dep content:pull production
+$ dep content:push production
+```
+
+### Backup remote server database
+
+```sh
+$ dep db:backup production
+```
+
+### Rollback remote database to last backup
+
+```sh
+$ dep db:rollback production
+```
 
 ## Documentation
 
