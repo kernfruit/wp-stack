@@ -105,6 +105,12 @@ $ dep db:backup production
 $ dep db:rollback production
 ```
 
+## Misc
+
+### SSL/TLS
+
+While Lando will automatically trust this CA internally it is up to you to trust it on your host machine. Doing so will alleviate browser warnings regarding certs we issue. Read more about this in the [Lando docs](https://docs.devwithlando.io/config/security.html).
+
 ## Documentation
 
 - Bedrock: [https://roots.io/bedrock/docs/](https://roots.io/bedrock/docs/)
