@@ -21,3 +21,6 @@ web/wp
 
 # WP-CLI
 wp-cli.local.yml
+
+# Database exports
+.db*
