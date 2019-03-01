@@ -18,7 +18,7 @@ if ! $(wp core is-installed); then
       printf "  ${GREEN}ADMIN USER:${NC} " && read ADMIN_USER;
       printf "  ${GREEN}ADMIN EMAIL:${NC} " && read ADMIN_EMAIL;
       echo "";
-      wp core install --url=$WP_HOME --title=$TITLE --admin_user=$ADMIN_USER --admin_email=$ADMIN_EMAIL
+      wp core install --url="$WP_HOME" --title="$TITLE" --admin_user="$ADMIN_USER" --admin_email="$ADMIN_EMAIL"
   else
       echo "No"
   fi
