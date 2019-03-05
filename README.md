@@ -25,12 +25,15 @@ Versions should match your development container (See `.lando.yml`)!
     $ git clone https://github.com/kernfruit/wp-stack
     $ git init
     ```
-- *Optional*: Change package name and URLs to your project name in following files:
-    ```
-    composer.json
-    .lando.yml
-    .env.lando
-    ```
+
+- Change package name and URLs to your project name in following files:
+  ```
+  composer.json
+  .lando.yml
+  .env.lando
+  ```
+  <small>If you do not want to use the `*.lndo.site` domain for development (e.g. for offline use) you have to manage SSL certificates by yourself! See section [Use custom domain for development](#use-custom-domain-for-development).</small>
+
 - Start Lando and follow instructions to create WordPress site:
     ```sh
     $ lando start
@@ -42,11 +45,16 @@ Versions should match your development container (See `.lando.yml`)!
     ```
 - Add the following line to your `/etc/hosts` file:
   ```
-  127.0.0.1 wp-stack.test
+  127.0.0.1 wp-stack.lndo.site
   ```
   <small>If you changed the `WP_URL` in your .env file you have to use it here as well!</small>
 
-- Access WordPress admin at https://wp-stack.test/wp-admin
+- Trust the `*.lndo.site` certificate to avoid warnings in browser:
+  ```sh
+  $ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ~/.lando/certs/lndo.site.pem
+  ```
+
+- Access WordPress admin at https://wp-stack.lndo.site/wp-admin
 
 ## Deployment
 
@@ -107,9 +115,37 @@ $ dep db:rollback production
 
 ## Misc
 
-### SSL/TLS
+### Use custom domain for development
 
-While Lando will automatically trust this CA internally it is up to you to trust it on your host machine. Doing so will alleviate browser warnings regarding certs we issue. Read more about this in the [Lando docs](https://docs.devwithlando.io/config/security.html).
+The `*.lando.site` domain will not work offline because it is an actual ON THE INTERNET wildcard DNS entry that points all `*.lndo.site` subdomains to `localhost/127.0.0.1`. See [Lando docs](https://docs.devwithlando.io/config/proxy.html) for more details on this.
+
+Fortunately you can use your own second-level domain replacing `lando.site` that will also work offline. To do so you have to add a proxy to your `.lando.yml`:
+
+```
+# .lando.yml
+…
+proxy:
+  appserver:
+    - wp-stack.dev.test
+…
+```
+
+In this example we use `*.dev.test` as second-level domain for our project. Now we have to tell Lando to create and use certificates for this domain. For that we have to change the global Lando config in `~/.lando/config.yml`. If this file does not exist yet, we create it:
+
+```
+# ~/.lando/config.yml
+domain: dev.test
+```
+
+Lando will create a wildcard certificate with this domain on start in `~/.lando/certs/`. This is also the reason why just using a top-level domain without a second level (e.g. just `*.test`) will not work: It is [not allowed](https://en.m.wikipedia.org/wiki/Wildcard_certificate#Limitations) due to security reasons.
+
+After starting Lando with `lando start` we [trust the created Lando cert](https://docs.devwithlando.io/config/security.html#trusting-the-ca) to avoid browser warnings:
+
+```sh
+$ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ~/.lando/certs/dev.test.pem
+```
+
+Do not forget to add your new project (sub-)domain to `/etc/hosts`.
 
 ## Documentation
 
