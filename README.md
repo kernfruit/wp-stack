@@ -5,7 +5,7 @@ Opinionated starting point for WordPress projects based on [Bedrock](https://roo
 ## Requirements
 
 ### On you computer for development
-* Lando - [Install](https://docs.devwithlando.io/installation/system-requirements.html)
+* Lando (Tested with v3.0.0-rc.10) - [Install](https://docs.devwithlando.io/installation/system-requirements.html)
 * Deployer - [Install](https://deployer.org/docs/getting-started.html)
 
 ### On server
