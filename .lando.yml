@@ -7,6 +7,11 @@ config:
   database: mysql:5.7
   xdebug: true
 services:
+  appserver:
+    config:
+      vhosts: .lando/default-ssl.conf
+    run_as_root:
+      - a2enmod http2
   composer:
     type: php:7.2
     run:
