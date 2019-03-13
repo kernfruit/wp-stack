@@ -45,6 +45,7 @@
   "scripts": {
     "test": [
       "phpcs"
-    ]
+    ],
+    "lando:db:backup": "lando db-export --stdout | gzip > .db/$(date '+%Y%m%d-%H%M%S').sql.gz"
   }
 }
