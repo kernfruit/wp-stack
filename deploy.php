@@ -64,7 +64,7 @@ task('db:push', function () {
     runLocally('lando db-export --stdout | gzip > .db.temp.sql.gz');
     upload('.db.temp.sql.gz', '.');
 
-    run('. {{release_path}}/.env && gzip -dc .db.temp.sql.gz | mysql -u$DB_USER -p$DB_PASSWORD $DB_NAME && rm .db.temp.sql.gz && ./wp-cli.phar search-replace "'.$localWPHome.'" "${WP_HOME}" --path="{{release_path}}/web/wp"');
+    run('. {{release_path}}/.env && gzip -dc .db.temp.sql.gz | mysql -u$DB_USER -p$DB_PASSWORD $DB_NAME && rm .db.temp.sql.gz && ./wp-cli.phar search-replace "'.$localWPHome.'" "${WP_HOME}" --path="{{release_path}}/web/wp" && ./wp-cli.phar elementor replace_urls "'.$localWPHome.'" "${WP_HOME}" --path="{{release_path}}/web/wp"');
     run('./wp-cli.phar transient delete --all --network --path="{{release_path}}/web/wp"');
 
     runLocally('rm .db.temp.sql.gz');
