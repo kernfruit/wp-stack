@@ -348,10 +348,18 @@ AddDefaultCharset utf-8
 #
 #     https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml
 #     https://tools.ietf.org/html/draft-ietf-acme-acme-12
+#
+# (2) Tell apache we're on HTTPS if reverse proxy is serving the site using
+#     SSL.
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On
+
+	# (2)
+	SetEnvIf X-Forwarded-Proto "https" HTTPS=on
+
 	RewriteCond %{HTTPS} !=on
+	RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
 #    # (1)
 #    # RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
 #    # RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[\w-]+$
