@@ -1,5 +1,8 @@
 name: wp-stack
 recipe: wordpress
+proxy:
+  mailhog:
+    - mail.wp-stack.lndo.site
 config:
   php: '7.2'
   via: apache:2.4
@@ -17,6 +20,10 @@ services:
     run:
       - composer update
       - composer install
+  mailhog:
+    type: mailhog
+    hogfrom:
+      - appserver
 events:
   pre-start:
     - cp .env.lando .env

@@ -115,6 +115,10 @@ $ dep db:rollback production
 
 ## Misc
 
+### Test mails
+
+This boilerplate comes with a [MailHog](https://github.com/mailhog/MailHog) service installed and configured to catch all mail that is send in development. The MailHog frontend can be accessed at `mail.<domain>.lndo.site`. You can change this URL in the `.lando.yml` file.
+
 ### Use custom domain for development
 
 The `*.lando.site` domain will not work offline because it is an actual ON THE INTERNET wildcard DNS entry that points all `*.lndo.site` subdomains to `localhost/127.0.0.1`. See [Lando docs](https://docs.devwithlando.io/config/proxy.html) for more details on this.
